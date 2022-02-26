@@ -1,22 +1,25 @@
 
 const machineList = document.querySelector('#machine-list'); // store the DOM
-const main = document.querySelector('.main')
-const auth = document.querySelector('.auth')
+const main = document.querySelector('.main');
+const auth = document.querySelector('.auth');
+const queue_screen = document.querySelector('.queue-screen');
 
 // initial hides
 main.classList.add('hide');
+queue_screen.classList.add('hide');
 
 // get the enter button on the auth screen
 let enter_button = auth.querySelector(".landing #enter");
 
-// add event handler to enter button to 'hide' the auth screen
-// and to 'show' the main screen
+// add event handler to "enter button" to 'hide' the auth screen
+// and to 'show' the main screen on click
 enter_button.addEventListener('click', (evnt) =>
 {
     auth.classList.add('hide');
     main.classList.remove('hide');
 });
-console.log(enter_button);
+
+//console.log(enter_button);
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -45,8 +48,6 @@ function renderMachines(doc) {
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
 
-        sendSMS();
-
         // gets the FIREBASE id of the machine that is clicked
         let id = evnt.target.parentElement.getAttribute('data-id'); 
         
@@ -61,15 +62,24 @@ function renderMachines(doc) {
 
             // prompt user for their UCInetID
             let ucinetid = prompt("Enter your UCInetID");
+            if (ucinetid != null)
+            {
+                db.collection('machines').doc(id).update({
+                    name: doc.data().name,
+                    names: firebase.firestore.FieldValue.arrayUnion(ucinetid),
+                    queue_size: queue_len
+                }); // updates the data stored in the FIREBASE database 
             
-            db.collection('machines').doc(id).update({
-                name: doc.data().name,
-                names: firebase.firestore.FieldValue.arrayUnion(ucinetid),
-                queue_size: queue_len
-            }); // updates the data stored in the FIREBASE database
+            
+                main.classList.add('hide');
+                queue_screen.classList.remove('hide');
+        
+            }
             
                 
             });
+
+        // once clicked, the page will redirect
     });
 }
 
@@ -97,7 +107,7 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
             renderMachines(change.doc);
         }
         else if (change.type == "modified"){
-            // selects the list element
+            // selects the modified list element
             let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
             // childNodes[1] represents the queue_size span element
             // this code updates that span element to reflect the new queue size
