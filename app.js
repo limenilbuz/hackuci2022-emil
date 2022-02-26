@@ -1,4 +1,8 @@
+
 const machineList = document.querySelector('#machine-list'); // store the DOM
+//const machineList = document.querySelector('#machine-list');
+const main = document.querySelector('.main')
+const auth = document.querySelector('.auth')
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -43,6 +47,7 @@ db.collection('machines').get().then((snapshot) => {
         renderMachines(doc);
     })
 })
+<<<<<<< HEAD
 */
 
 // real time listener
@@ -67,3 +72,6 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     });
 
 })
+
+
+main.classList.add('hide');
