@@ -4,6 +4,21 @@ const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main')
 const auth = document.querySelector('.auth')
 
+// initial hides
+main.classList.add('hide');
+
+// get the enter button on the auth screen
+let enter_button = auth.querySelector(".landing #enter");
+
+// add event handler to enter button to 'hide' the auth screen
+// and to 'show' the main screen
+enter_button.addEventListener('click', (evnt) =>
+{
+    auth.classList.add('hide');
+    main.classList.remove('hide');
+});
+console.log(enter_button);
+
 function renderMachines(doc) {
     let li = document.createElement('li');
     let name = document.createElement('span');
@@ -52,11 +67,7 @@ function renderMachines(doc) {
                 queue_size: queue_len
             }); // updates the data stored in the FIREBASE database
             
-            /*
-            db.collection('machines').doc(id).update({
-                queue_size: 
-            }); // updates the data stored in the FIREBASE database        });
-            */        
+                
             });
     });
 }
@@ -88,5 +99,3 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
 
 })
 
-auth.classList.add('hide');
-//main.classList.add('hide');
