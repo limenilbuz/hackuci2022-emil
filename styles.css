@@ -139,3 +139,9 @@ button{
     letter-spacing: 1px;
     color: #999;
 }
+
+body .top_bar{
+    text-align: center;
+    font-size: 80px;
+    background-color: #cf6d18;
+}
