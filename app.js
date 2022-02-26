@@ -1,6 +1,5 @@
 
 const machineList = document.querySelector('#machine-list'); // store the DOM
-//const machineList = document.querySelector('#machine-list');
 const main = document.querySelector('.main')
 const auth = document.querySelector('.auth')
 
@@ -46,7 +45,7 @@ function renderMachines(doc) {
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
 
-        
+        sendSMS();
 
         // gets the FIREBASE id of the machine that is clicked
         let id = evnt.target.parentElement.getAttribute('data-id'); 
@@ -74,8 +73,22 @@ function renderMachines(doc) {
     });
 }
 
-// real time listener
+async function sendSMS() {
+    try {
+        const response = await axios.post('http://localhost:3001/sendsms', {
+            phonenumber: "+12404724142",
+            textmessage: "Waitless - Your machine is ready!"
+        });
 
+        console.log(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+// real time listener
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
