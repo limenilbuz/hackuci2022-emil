@@ -50,7 +50,6 @@ db.collection('machines').get().then((snapshot) => {
 <<<<<<< HEAD
 */
 
-// real time listener
 
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
@@ -74,4 +73,5 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
 })
 
 
-main.classList.add('hide');
+// main.classList.add('hide');
+auth.classList.add('hide');
