@@ -1,4 +1,4 @@
-const machineList = document.querySelector('#machine-list');
+const machineList = document.querySelector('#machine-list'); // store the DOM
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -28,15 +28,42 @@ function renderMachines(doc) {
         evnt.stopPropagation(); // stops the default action
         let id = evnt.target.parentElement.getAttribute('data-id'); // gets the FIREBASE id of the machine that is clicked
         
+        let new_size = db.collection('machines').doc(id).data();
+        console.log(new_size);
         db.collection('machines').doc(id).set({
             name: doc.data().name,
-            queue_size: (doc.data().queue_size + 1)
+            queue_size: queue_size + 1
         }); // updates the data stored in the FIREBASE database
-    })
+    }) 
 }
 
+/*
 db.collection('machines').get().then((snapshot) => {
     snapshot.docs.forEach(doc => {
         renderMachines(doc);
     })
+})
+*/
+
+// real time listener
+
+db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
+    let changes = snapshot.docChanges();
+    changes.forEach(change => {
+        if(change.type == "added"){
+            renderMachines(change.doc);
+        }
+        else if (change.type == "modified"){
+            // selects the list element
+            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            li.childNodes[1].innerHTML = change.doc.data().queue_size;
+            
+        }
+        else if (change.type == "removed"){
+            // store the li element according to that data id that is removed
+            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            machineList.removeChild(li);
+        }
+    });
+
 })
