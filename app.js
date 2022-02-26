@@ -1,4 +1,6 @@
 const machineList = document.querySelector('#machine-list');
+const main = document.querySelector('.main')
+const auth = document.querySelector('.auth')
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -20,3 +22,5 @@ db.collection('machines').get().then((snapshot) => {
         renderMachines(doc);
     })
 })
+
+main.classList.add('hide');
