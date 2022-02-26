@@ -27,7 +27,7 @@ function renderMachines(doc) {
     machineList.appendChild(li);
 
 
-    // add event listener to the add buttons so that they have functionality
+    // add event listener to the "join queue" buttons so that they have functionality
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
 
@@ -35,24 +35,31 @@ function renderMachines(doc) {
         let id = evnt.target.parentElement.getAttribute('data-id'); 
         
         // store the specific machine from FIREBASE
-        const machine_to_be_updated = db.collection('machines').doc(id);
+        const machine = db.collection('machines').doc(id);
 
-        // async function to incremement the queue size
-        machine_to_be_updated.get().then((doc)=>{
-            new_size = doc.data().queue_size + 1;
+        // async function to update the queue.
+        machine.get().then((doc)=>{
 
+            // get the length of the array that represents the queue
+            queue_len = doc.data().names.length;
+
+            // prompt user for their UCInetID
+            let ucinetid = prompt("Enter your UCInetID");
+            
             db.collection('machines').doc(id).update({
                 name: doc.data().name,
-                queue_size: new_size
+                names: firebase.firestore.FieldValue.arrayUnion(ucinetid),
+                queue_size: queue_len
             }); // updates the data stored in the FIREBASE database
-        });
-
-        //console.log(doc.data());
-        
-        
-    }) 
+            
+            /*
+            db.collection('machines').doc(id).update({
+                queue_size: 
+            }); // updates the data stored in the FIREBASE database        });
+            */        
+            });
+    });
 }
-
 
 // real time listener
 
