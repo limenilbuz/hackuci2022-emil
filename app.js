@@ -4,6 +4,21 @@ const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main')
 const auth = document.querySelector('.auth')
 
+// initial hides
+main.classList.add('hide');
+
+// get the enter button on the auth screen
+let enter_button = auth.querySelector(".landing #enter");
+
+// add event handler to enter button to 'hide' the auth screen
+// and to 'show' the main screen
+enter_button.addEventListener('click', (evnt) =>
+{
+    auth.classList.add('hide');
+    main.classList.remove('hide');
+});
+console.log(enter_button);
+
 function renderMachines(doc) {
     let li = document.createElement('li');
     let name = document.createElement('span');
@@ -27,44 +42,55 @@ function renderMachines(doc) {
     machineList.appendChild(li);
 
 
-    // add event listener to the add buttons so that they have functionality
+    // add event listener to the "join queue" buttons so that they have functionality
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
-        let id = evnt.target.parentElement.getAttribute('data-id'); // gets the FIREBASE id of the machine that is clicked
-        
-        var new_size;
-        const machine_to_be_updated = db.collection('machines').doc(id);
 
-        machine_to_be_updated.get().then((doc)=>{
-            new_size = doc.data().queue_size + 1;
+        // gets the FIREBASE id of the machine that is clicked
+        let id = evnt.target.parentElement.getAttribute('data-id'); 
+        
+        // store the specific machine from FIREBASE
+        const machine = db.collection('machines').doc(id);
+
+        // async function to update the queue.
+        machine.get().then((doc)=>{
+
+            // get the length of the array that represents the queue
+            queue_len = doc.data().names.length;
+
+            // prompt user for their UCInetID
+            let ucinetid = prompt("Enter your UCInetID");
             
             db.collection('machines').doc(id).update({
                 name: doc.data().name,
-                queue_size: new_size
+                names: firebase.firestore.FieldValue.arrayUnion(ucinetid),
+                queue_size: queue_len
             }); // updates the data stored in the FIREBASE database
-        });
-
-        console.log(doc.data());
-        
-        
-    }) 
+            
+                
+            });
+    });
 }
 
-
+// real time listener
 
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
         if(change.type == "added"){
+            // renders all the machines intially
             renderMachines(change.doc);
         }
         else if (change.type == "modified"){
             // selects the list element
             let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            // childNodes[1] represents the queue_size span element
+            // this code updates that span element to reflect the new queue size
             li.childNodes[1].innerHTML = change.doc.data().queue_size;
             
         }
         else if (change.type == "removed"){
+            // probably wont be used...
             // store the li element according to that data id that is removed
             let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
             machineList.removeChild(li);
