@@ -1,0 +1,5 @@
+UCI:
+Based Blue: 0064a4
+Nice Navy: 1b3d6d
+Yelly Yellow: ffd200
+Erratic Orange: ffd200
