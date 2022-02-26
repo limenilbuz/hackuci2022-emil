@@ -145,3 +145,7 @@ body .top_bar{
     font-size: 80px;
     background-color: #cf6d18;
 }
+
+body .auth .landing .enter{
+    border-radius: 10%;
+}
