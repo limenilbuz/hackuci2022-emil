@@ -31,6 +31,8 @@ function renderMachines(doc) {
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
 
+        
+
         // gets the FIREBASE id of the machine that is clicked
         let id = evnt.target.parentElement.getAttribute('data-id'); 
         
