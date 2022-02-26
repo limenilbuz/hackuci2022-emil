@@ -32,23 +32,24 @@ function renderMachines(doc) {
         evnt.stopPropagation(); // stops the default action
         let id = evnt.target.parentElement.getAttribute('data-id'); // gets the FIREBASE id of the machine that is clicked
         
-        let new_size = db.collection('machines').doc(id).data();
-        console.log(new_size);
-        db.collection('machines').doc(id).set({
-            name: doc.data().name,
-            queue_size: queue_size + 1
-        }); // updates the data stored in the FIREBASE database
+        var new_size;
+        const machine_to_be_updated = db.collection('machines').doc(id);
+
+        machine_to_be_updated.get().then((doc)=>{
+            new_size = doc.data().queue_size + 1;
+            
+            db.collection('machines').doc(id).update({
+                name: doc.data().name,
+                queue_size: new_size
+            }); // updates the data stored in the FIREBASE database
+        });
+
+        console.log(doc.data());
+        
+        
     }) 
 }
 
-/*
-db.collection('machines').get().then((snapshot) => {
-    snapshot.docs.forEach(doc => {
-        renderMachines(doc);
-    })
-})
-<<<<<<< HEAD
-*/
 
 
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
@@ -72,6 +73,3 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
 
 })
 
-
-// main.classList.add('hide');
-auth.classList.add('hide');
