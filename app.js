@@ -148,18 +148,13 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
-<<<<<<< HEAD
-    let ucinetid = doc.data().names[doc.data().names.length-1];
-
-=======
->>>>>>> ba5c03696c1d8cb817a13096a0bc67ddfee89a9a
     // logic for rendering the screen initially
 
     let queue_screen_element = document.getElementById("current_machine_name"); 
     queue_screen_element.innerHTML = doc.data().name;
 
     let pos = document.getElementById("position");
-    pos.innerHTML += doc.data().names.length-1 + " in line!";
+    pos.innerHTML = "You are #" doc.data().names.length-1 + " in line!";
 
     let data = doc.data();
     let row ="";
