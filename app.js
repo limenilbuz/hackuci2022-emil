@@ -147,11 +147,8 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
-<<<<<<< HEAD
     let ucinetid = doc.data().names[doc.data().names.length-1];
 
-=======
->>>>>>> ba5c03696c1d8cb817a13096a0bc67ddfee89a9a
     // logic for rendering the screen initially
 
     let queue_screen_element = document.getElementById("current_machine_name"); 
@@ -201,26 +198,3 @@ function renderQueue(doc, user)
     });
 
 }
-
-
-// $(window).on("load resize ", function() {
-//     var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
-//     $('.tbl-header').css({'padding-right':scrollWidth});
-//   }).resize();
-/*
-window.addEventListener('beforeunload', (e) => {
-    e.preventDefault();
-    e.returnValue = '';
-    db.collection("machines").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            console.log(doc.data().names)
-            if (uid in doc.data().names)
-            {
-                db.collection('machines').doc(doc.id).update({
-                    names: firebase.firestore.FieldValue.arrayRemove(uid)
-                })
-            }
-        });
-    });
-});
-*/
