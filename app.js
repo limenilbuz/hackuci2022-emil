@@ -8,6 +8,7 @@ const claim_page = document.querySelector('.claim_page');
 main.classList.add('hide');
 queue_screen.classList.add('hide');
 claim_page.classList.add('hide');
+
 // get the enter button on the auth screen
 let enter_button = auth.querySelector(".landing #enter");
 
@@ -147,15 +148,13 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
-    let ucinetid = doc.data().names[doc.data().names.length-1];
-
     // logic for rendering the screen initially
 
     let queue_screen_element = document.getElementById("current_machine_name"); 
     queue_screen_element.innerHTML = doc.data().name;
 
     let pos = document.getElementById("position");
-    pos.innerHTML += doc.data().names.length-1 + " in line!";
+    pos.innerHTML = "You are #"+ doc.data().names.length-1 + " in line!";
 
     let data = doc.data();
     let row ="";
@@ -171,17 +170,20 @@ function renderQueue(doc, user)
 
         event.stopPropagation();
         
+        db.collection('machines').doc(doc.id).update({
+            name: doc.data().name,
+            names: firebase.firestore.FieldValue.arrayRemove(uid),
+            queue_size: doc.data().names.length -1
+        }); // updates the data stored in the FIREBASE database
 
         main.classList.remove('hide');
         queue_screen.classList.add('hide');
 
-        sleep(30000).then(() =>{
-            sendSMS();
-        });
+        
     });
+
     let claim_buttom = document.getElementById("claim_machine_button");
     claim_buttom.addEventListener('click', (event) =>{
-        //sendSMS();
         event.stopPropagation();
         let machine_name = document.getElementById("current_machine_name");
         const machine = db.collection('machines').doc(machine_name.getAttribute('data-id'));
@@ -194,6 +196,9 @@ function renderQueue(doc, user)
         queue_screen.classList.add('hide');
         claim_page.classList.remove('hide');
 
+        sleep(30000).then(() =>{
+            sendSMS();
+        });
 
     });
 
