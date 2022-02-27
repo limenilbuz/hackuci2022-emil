@@ -8,6 +8,7 @@ const claim_page = document.querySelector('.claim_page');
 main.classList.add('hide');
 queue_screen.classList.add('hide');
 claim_page.classList.add('hide');
+
 // get the enter button on the auth screen
 let enter_button = auth.querySelector(".landing #enter");
 
@@ -163,17 +164,20 @@ function renderQueue(doc, user)
 
         event.stopPropagation();
         
+        db.collection('machines').doc(doc.id).update({
+            name: doc.data().name,
+            names: firebase.firestore.FieldValue.arrayRemove(uid),
+            queue_size: doc.data().names.length -1
+        }); // updates the data stored in the FIREBASE database
 
         main.classList.remove('hide');
         queue_screen.classList.add('hide');
 
-        sleep(30000).then(() =>{
-            sendSMS();
-        });
+        
     });
+
     let claim_buttom = document.getElementById("claim_machine_button");
     claim_buttom.addEventListener('click', (event) =>{
-        //sendSMS();
         event.stopPropagation();
         let machine_name = document.getElementById("current_machine_name");
         const machine = db.collection('machines').doc(machine_name.getAttribute('data-id'));
@@ -186,6 +190,9 @@ function renderQueue(doc, user)
         queue_screen.classList.add('hide');
         claim_page.classList.remove('hide');
 
+        sleep(30000).then(() =>{
+            sendSMS();
+        });
 
     });
 

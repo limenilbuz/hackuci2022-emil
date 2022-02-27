@@ -63,6 +63,9 @@ h6 {
     display: none;
 }
 
+.claim_page.hide{
+    display: none;
+}
 ul{
     list-style-type: none;
     padding: 10px ;
