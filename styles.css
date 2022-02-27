@@ -209,8 +209,8 @@ table{
 #leave_queue_id {
     display: inline-block;
     border-radius: 300px;
-    background-color: #1ef465;
-    border:#25c481;
+    background-color: #db3315;
+    border:#e76915;
     color: #FFFFFF;
     text-align: center;
     font-size: 40px;
@@ -220,14 +220,13 @@ table{
     transition: all 0.5s;
     cursor: pointer;
     position: relative;
-    top: 650px;
+    top: 500px;
     
   }
   
   #leave_queue_id span {
     cursor: pointer;
     display: inline-block;
-    position: relative;
     transition: 0.9s;
   }
   
@@ -251,7 +250,7 @@ table{
 
   #claim_machine_button {
     display: inline-block;
-    border-radius: 300px;
+    border-radius: 200px;
     background-color: #1ef465;
     border:#25c481;
     color: #FFFFFF;
@@ -263,14 +262,13 @@ table{
     transition: all 0.5s;
     cursor: pointer;
     position: relative;
-    top: 650px;
+    top: 500px;
     
   }
   
   #claim_machine_button span {
     cursor: pointer;
     display: inline-block;
-    position: relative;
     transition: 0.9s;
   }
   
