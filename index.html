@@ -14,7 +14,7 @@
                 <div class="top"></div>
                 <div class="bottom"></div>
                 
-                <img src="Images/Logo1.png" class="png1" />
+                <img src="Images/Logo1.png" class="png1"/>
                 <h1>Waitless</h1>
                 <h6 id="enter">Start to enter queues</h6>
               </div>
@@ -32,13 +32,21 @@
     
         <div class="queue-screen">
             <h1 id="current_machine_name">You are currently in queue for: </h1>
-            <h2>You are number # in line.</h2>
+            <h2 id="position">You are number #</h2>
             <table id="myTable"> </table>
 
-
+            <button id="claim_machine_button">Your machine is ready! Click here to claim it!</button>
             <button id="leave_queue_id"><b>Press to leave</b></button>
         </div>
         
+
+
+        <div class="claim_page">
+
+            <h1>You have claimed this machine!</h1>
+            <h1>Please wait shortly for your confirmation text!</h1>
+
+        </div>
         <script src="fire.js"></script>
         <script src="app.js"></script>
         
