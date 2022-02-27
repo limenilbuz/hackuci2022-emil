@@ -154,22 +154,29 @@ function renderQueue(doc)
 
 }
 
-/*
-db.collection("machines")
-.get()
-.then(querySnapshot=>{
-        querySnapshot.forEach(doc=>{
-            let data = doc.data();
-            let row  = `<tr>`;
-            for(var i =0; i < data.names.length; i++)
-                 row += `<td>${data.names[i]}</td>`;
-            row += `</tr>`;
-            
-            let table = document.getElementById("myTable");
-            table.innerHTML += row;
-        })
-    })
-    .catch(err=>{
-        console.log(`Error: ${err}`)
-    });
-*/
+
+
+leave_queue_id.addEventListener('click', (event)=>{
+
+    console.log()
+//     let id = event.target.parentElement.getAttribute(doc.id);
+
+//     const machine = db.collection('machines').doc(id);
+
+//     machine.get().then((doc)=>{
+        
+//         var queue_update = doc.data().names.slice(0,-1);
+        
+
+//         db.collection('machines').doc(id).update({
+//             names: queue_update,
+//             queue_size: queue_size - 1
+//         }); // updates the data stored in the FIREBASE database 
+    
+//         main.classList.remove('hide');
+//       //  queue_screen.classList.remove('hide');
+
+// });
+
+    // async function to update the queue.
+});
