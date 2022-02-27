@@ -85,18 +85,20 @@ function renderMachines(doc) {
     let name = document.createElement('span');
     let queue_size = document.createElement('span');
     let add_button = document.createElement('div'); // create the 'join' button
+    add_button.classList.add('joinQueue');
 
     // set the list items' "data-id" attribute to its corresponding id from FIREBASE
     li.setAttribute('data-id', doc.id);
 
     // intialize the text content of the list item
     name.textContent = doc.data().name;
-    queue_size.textContent = doc.data().names.length - 1;
+    queue_size.textContent = "People in queue: " + (doc.data().names.length - 1);
     add_button.textContent = "Join this queue";
 
     // append the items to the list item
     li.appendChild(name);
     li.appendChild(queue_size);
+    li.appendChild(document.createElement('br'));
     li.appendChild(add_button);
 
     // append the list to the DOM
@@ -154,7 +156,7 @@ function renderQueue(doc, user)
     queue_screen_element.innerHTML = doc.data().name;
 
     let pos = document.getElementById("position");
-    pos.innerHTML = "You are #" + doc.data().names.length-1 + " in line!";
+    pos.innerHTML = "You are "+ (doc.data().names.length-1) + " in line!";
 
     let data = doc.data();
     let row ="";
@@ -173,7 +175,7 @@ function renderQueue(doc, user)
         db.collection('machines').doc(doc.id).update({
             name: doc.data().name,
             names: firebase.firestore.FieldValue.arrayRemove(uid),
-            queue_size: doc.data().names.length -1
+            queue_size: "People in queue: " + doc.data().names.length -1
         }); // updates the data stored in the FIREBASE database
 
         main.classList.remove('hide');
