@@ -152,35 +152,3 @@ function renderQueue(doc)
     table.innerHTML = row;
     
 }
-
-
-$(window).on("load resize ", function() {
-    var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
-    $('.tbl-header').css({'padding-right':scrollWidth});
-  }).resize();
-
-
-leave_queue_id.addEventListener('click', (event)=>{
-
-    //console.log()
-    
-    let machine_name = document.getElementById("current_machine_name");
-    const machine = db.collection('machines').doc(id);
-    
-//     machine.get().then((doc)=>{
-        
-//         var queue_update = doc.data().names.slice(0,-1);
-        
-
-//         db.collection('machines').doc(id).update({
-//             names: queue_update,
-//             queue_size: queue_size - 1
-//         }); // updates the data stored in the FIREBASE database 
-    
-//         main.classList.remove('hide');
-//       //  queue_screen.classList.remove('hide');
-
-// });
-
-    // async function to update the queue.
-});
