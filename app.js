@@ -154,7 +154,7 @@ function renderQueue(doc, user)
     queue_screen_element.innerHTML = doc.data().name;
 
     let pos = document.getElementById("position");
-    pos.innerHTML = "You are #"+ doc.data().names.length-1 + " in line!";
+    pos.innerHTML = "You are #" + doc.data().names.length-1 + " in line!";
 
     let data = doc.data();
     let row ="";
