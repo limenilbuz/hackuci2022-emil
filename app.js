@@ -1,9 +1,13 @@
+
 const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main');
 const auth = document.querySelector('.auth');
 const queue_screen = document.querySelector('.queue-screen');
 const claim_page = document.querySelector('.claim_page');
-
+const uid_map = new Map();
+uid_map.set('SS7scvBhrRY0rSJezqnkNVCN08g2', 'Emil');
+uid_map.set('KRXk7oQiUfVrrBW1TVrjKsVJKoe2', "AJ");
+uid_map.set('MQ7KhOBV5UaXw7qDu6SWRd9EwLJ3', "Adil");
 // initial hides
 main.classList.add('hide');
 queue_screen.classList.add('hide');
@@ -157,11 +161,14 @@ function renderQueue(doc, user)
 
     let pos = document.getElementById("position");
     pos.innerHTML = "You are "+ (doc.data().names.length-1) + " in line!";
-
+    //const JSONnames = require('./names.json');
+    //console.log(JSONnames);
+    fetch("names.json").then(response => response.json()).then(json=>console.log(json));
+    //console.log(json);
     let data = doc.data();
     let row ="";
     for(var i =1; i < data.names.length; i++)
-         row += `<tr><td>${i}</td><td>${data.names[i]}</td></tr>`;
+         row += `<tr><td>${i}</td><td>${uid_map.get(data.names[i])}</td></tr>`;
     
     let table = document.getElementById("myTable");
     queue_screen_element.setAttribute('data-id', doc.id);
