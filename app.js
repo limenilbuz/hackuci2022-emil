@@ -90,18 +90,20 @@ function renderMachines(doc) {
     let name = document.createElement('span');
     let queue_size = document.createElement('span');
     let add_button = document.createElement('div'); // create the 'join' button
+    add_button.classList.add('joinQueue');
 
     // set the list items' "data-id" attribute to its corresponding id from FIREBASE
     li.setAttribute('data-id', doc.id);
 
     // intialize the text content of the list item
     name.textContent = doc.data().name;
-    queue_size.textContent = doc.data().queue_size;
+    queue_size.textContent = "People in queue: " + doc.data().queue_size;
     add_button.textContent = "Join this queue";
 
     // append the items to the list item
     li.appendChild(name);
     li.appendChild(queue_size);
+    li.appendChild(document.createElement('br'));
     li.appendChild(add_button);
 
     // append the list to the DOM
