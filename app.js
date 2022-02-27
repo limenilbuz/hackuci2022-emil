@@ -1,17 +1,3 @@
-let token = 'ezublin';
-
-firebase.auth().signInWithEmailAndPassword('ejzublin@gmail.com', 'a212sdf')
-  .then((userCredential) => {
-    // Signed in 
-    var user = userCredential.user;
-    console.log(user.email);
-  })
-  .catch((error) => {
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log("ERROR!!!!!!!!!!!!!!", errorCode, errorMessage);
-  });
-
 const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main');
 const auth = document.querySelector('.auth');
@@ -54,6 +40,7 @@ firebase.auth().onAuthStateChanged((user) => {
                 renderMachines(change.doc);
             }
             else if (change.type == "modified"){
+                console.log("PLEASE");
                 // selects the modified list element
                 let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
                 // childNodes[1] represents the queue_size span element
@@ -63,7 +50,7 @@ firebase.auth().onAuthStateChanged((user) => {
                 chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
                 //console.log(chosen_machine_id);
                 
-                
+                //renderMachines(change.doc);
                 renderQueue(change.doc, uid);
             }
             else if (change.type == "removed"){
@@ -111,10 +98,10 @@ function renderMachines(doc) {
     // add event listener to the "join queue" buttons so that they have functionality
     add_button.addEventListener('click', (evnt) => {
         evnt.stopPropagation(); // stops the default action
-
+        //console.log("addBUTTO!!!!");
         // gets the FIREBASE id of the machine that is clicked
         let id = evnt.target.parentElement.getAttribute('data-id'); 
-        
+        //console.log(id);
         // store the specific machine from FIREBASE
         const machine = db.collection('machines').doc(id);
 
@@ -125,23 +112,18 @@ function renderMachines(doc) {
             queue_len = doc.data().names.length;
 
             // prompt user for their UCInetID
-            let ucinetid = prompt("Enter your UCInetID");
+            //let ucinetid = prompt("Enter your UCInetID");
 
-            if (ucinetid != null)
-            {
-                db.collection('machines').doc(id).update({
-                    name: doc.data().name,
-                    names: firebase.firestore.FieldValue.arrayUnion(ucinetid),
-                    queue_size: queue_len
-                }); // updates the data stored in the FIREBASE database 
+            db.collection('machines').doc(id).update({
+                name: doc.data().name,
+                names: firebase.firestore.FieldValue.arrayUnion(uid),
+                queue_size: queue_len
+            }); // updates the data stored in the FIREBASE database 
             
             
-                main.classList.add('hide');
-                queue_screen.classList.remove('hide');
+            main.classList.add('hide');
+            queue_screen.classList.remove('hide');
         
-            }
-
-            
             });
 
         // once clicked, the page will redirect
@@ -168,6 +150,7 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
+    console.log("PLAPSLEAKSJEKIJ");
     let ucinetid = doc.data().names[doc.data().names.length-1];
 
     // logic for rendering the screen initially
@@ -182,8 +165,31 @@ function renderQueue(doc, user)
          row += `<tr><td>${i}</td><td>${data.names[i]}</td></tr>`;
     
     let table = document.getElementById("myTable");
+    queue_screen_element.setAttribute('data-id', doc.id);
     table.innerHTML = row;
     
+    leave_queue_id = document.getElementById("leave_queue_id");
+    leave_queue_id.addEventListener('click', (event)=>{
+
+        event.stopPropagation();
+        //console.log()
+        
+        let machine_name = document.getElementById("current_machine_name");
+        const machine = db.collection('machines').doc(machine_name.getAttribute('data-id'));
+        console.log(machine);
+
+        let queue_len = doc.data().names.length - 1;
+
+        main.classList.remove('hide');
+        queue_screen.classList.add('hide');
+
+        db.collection('machines').doc(doc.id).update({
+            name: doc.data().name,
+            names: firebase.firestore.FieldValue.arrayRemove(uid),
+            queue_size: queue_len
+        }); // updates the data stored in the FIREBASE database
+
+    });
 }
 
 
@@ -192,28 +198,3 @@ $(window).on("load resize ", function() {
     $('.tbl-header').css({'padding-right':scrollWidth});
   }).resize();
 
-
-leave_queue_id.addEventListener('click', (event)=>{
-
-    //console.log()
-    
-    let machine_name = document.getElementById("current_machine_name");
-    const machine = db.collection('machines').doc(id);
-    
-//     machine.get().then((doc)=>{
-        
-//         var queue_update = doc.data().names.slice(0,-1);
-        
-
-//         db.collection('machines').doc(id).update({
-//             names: queue_update,
-//             queue_size: queue_size - 1
-//         }); // updates the data stored in the FIREBASE database 
-    
-//         main.classList.remove('hide');
-//       //  queue_screen.classList.remove('hide');
-
-// });
-
-    // async function to update the queue.
-});
