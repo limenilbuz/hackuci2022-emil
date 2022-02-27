@@ -175,7 +175,6 @@ function renderQueue(doc, user)
     let queue_screen_element = document.getElementById("current_machine_name");
     queue_screen_element.innerHTML = doc.data().name;
 
-    let ucinetid = doc.data().names[doc.data().names.length-1];
     //console.log(ucinetid);
     let data = doc.data();
     let row ="";
