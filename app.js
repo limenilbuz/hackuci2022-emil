@@ -20,7 +20,6 @@ enter_button.addEventListener('click', (evnt) =>
     main.classList.remove('hide');
 });
 
-//console.log(enter_button);
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -76,8 +75,7 @@ function renderMachines(doc) {
                 queue_screen.classList.remove('hide');
         
             }
-            
-                
+
             });
 
         // once clicked, the page will redirect
@@ -109,5 +107,24 @@ db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
         }
     });
 
-})
+});
 
+
+
+db.collection("machines")
+.get()
+.then(querySnapshot=>{
+        querySnapshot.forEach(doc=>{
+            let data = doc.data();
+            let row  = `<tr>`;
+            for(var i =0; i < data.names.length; i++)
+                 row += `<td>${data.names[i]}</td>`;
+            row += `</tr>`;
+            
+            let table = document.getElementById("myTable");
+            table.innerHTML += row;
+        })
+    })
+    .catch(err=>{
+        console.log(`Error: ${err}`)
+    });
