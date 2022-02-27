@@ -141,7 +141,7 @@ function renderQueue(doc)
     queue_screen_element.innerHTML = doc.data().name;
 
     let ucinetid = doc.data().names[doc.data().names.length-1];
-    console.log(ucinetid);
+    //console.log(ucinetid);
     let data = doc.data();
     let row ="";
     for(var i =1; i < data.names.length; i++)
@@ -150,19 +150,23 @@ function renderQueue(doc)
     
     let table = document.getElementById("myTable");
     table.innerHTML = row;
-    console.log(row);
-
+    
 }
 
+
+$(window).on("load resize ", function() {
+    var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+    $('.tbl-header').css({'padding-right':scrollWidth});
+  }).resize();
 
 
 leave_queue_id.addEventListener('click', (event)=>{
 
-    console.log()
-//     let id = event.target.parentElement.getAttribute(doc.id);
-
-//     const machine = db.collection('machines').doc(id);
-
+    //console.log()
+    
+    let machine_name = document.getElementById("current_machine_name");
+    const machine = db.collection('machines').doc(id);
+    
 //     machine.get().then((doc)=>{
         
 //         var queue_update = doc.data().names.slice(0,-1);
