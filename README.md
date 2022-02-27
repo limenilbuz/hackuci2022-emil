@@ -6,7 +6,7 @@ During this hackathon, we had 36 hours to brainstorm, develop and test our proje
 
 We landed on a simple idea, but one with its own set of complexities and challenges. 
 
-The problem was widespread: any regular gym-goer knows the struggle of having to ask if a certain machine was occupied. We decided that we should develop an app to remedy this problem, in a simple and effective way. Our idea was a mobile web-app that would allow users of a gym to "get in line" for any specific machine, so that there is never any confusion on who gets next dibs.
+The problem was widespread: any regular gym-goer knows the struggle of having to ask if a certain machine was occupied. It becomes a hassle to ask every person using a machine how much time they have left on the machine. We decided that we should develop an app to remedy this problem, in a simple and effective way. Our idea was a mobile web-app that would allow users of a gym to "get in line" for any specific machine, so that there is never any confusion on who gets next dibs.
 
 For our tech stack, we needed to find something that we could all agree on, but at the same time use as a learning experience. For most of our team members, this was their first hackathon, and first project dealing with web dev at a higher sense of complexity. We decided to stick with the classics, HTML/CSS and Javascript for our front-end. For our backend we chose Google Firebase. We chose Firebase because we were aware of its unique strengths and how we could leverage those strengths.
 
