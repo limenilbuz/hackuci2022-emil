@@ -4,7 +4,6 @@ const main = document.querySelector('.main');
 const auth = document.querySelector('.auth');
 const queue_screen = document.querySelector('.queue-screen');
 
-
 // initial hides
 main.classList.add('hide');
 queue_screen.classList.add('hide');
@@ -20,6 +19,34 @@ enter_button.addEventListener('click', (evnt) =>
     main.classList.remove('hide');
 });
 
+let main_page_listener;
+
+main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
+    let changes = snapshot.docChanges();
+    changes.forEach(change => {
+        if(change.type == "added"){
+            // renders all the machines intially
+            renderMachines(change.doc);
+        }
+        else if (change.type == "modified"){
+            // selects the modified list element
+            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            // childNodes[1] represents the queue_size span element
+            // this code updates that span element to reflect the new queue size
+            li.childNodes[1].innerHTML = change.doc.data().queue_size;
+
+            chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
+            console.log(chosen_machine_id);
+        }
+        else if (change.type == "removed"){
+            // probably wont be used...
+            // store the li element according to that data id that is removed
+            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            machineList.removeChild(li);
+        }
+    });
+
+})
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -62,6 +89,7 @@ function renderMachines(doc) {
 
             // prompt user for their UCInetID
             let ucinetid = prompt("Enter your UCInetID");
+
             if (ucinetid != null)
             {
                 db.collection('machines').doc(id).update({
@@ -76,28 +104,37 @@ function renderMachines(doc) {
         
             }
 
+            
             });
 
         // once clicked, the page will redirect
     });
+
+    main_page_listener(); // deactivate the main page listener
 }
 
-// real time listener
+async function sendSMS() {
+    try {
+        const response = await axios.post('http://localhost:3001/sendsms', {
+            phonenumber: "+12404724142",
+            textmessage: "Waitless - Your machine is ready!"
+        });
 
+        console.log(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+// real time listener
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
-        if(change.type == "added"){
-            // renders all the machines intially
-            renderMachines(change.doc);
-        }
-        else if (change.type == "modified"){
-            // selects the modified list element
-            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
-            // childNodes[1] represents the queue_size span element
-            // this code updates that span element to reflect the new queue size
-            li.childNodes[1].innerHTML = change.doc.data().queue_size;
-            
+        if (change.type == "modified"){
+            console.log(change.doc.id);
+            console.log(change.doc.data().names);
         }
         else if (change.type == "removed"){
             // probably wont be used...
@@ -128,3 +165,4 @@ db.collection("machines")
     .catch(err=>{
         console.log(`Error: ${err}`)
     });
+
