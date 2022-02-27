@@ -1,7 +1,7 @@
+# <img src="Images/Logo1.png" width=10%  style="float : right"/> 
 # Waitless, a simple queuing system 
 ## Built in 36 hours during HACK@UCI 2022
 ### Team members: Emil Zublin, Adil Quamar, Lee Austin Uy, Abhishek Jha, Brandon Chan
-
 During this hackathon, we had 36 hours to brainstorm, develop and test our project.
 
 We landed on a simple idea, but one with its own set of complexities and challenges. 
