@@ -76,6 +76,7 @@ function renderMachines(doc) {
                 queue_screen.classList.remove('hide');
         
             }
+
             
             });
 
@@ -127,4 +128,25 @@ main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot
         }
     });
 
-})
+});
+
+
+
+db.collection("machines")
+.get()
+.then(querySnapshot=>{
+        querySnapshot.forEach(doc=>{
+            let data = doc.data();
+            let row  = `<tr>`;
+            for(var i =0; i < data.names.length; i++)
+                 row += `<td>${data.names[i]}</td>`;
+            row += `</tr>`;
+            
+            let table = document.getElementById("myTable");
+            table.innerHTML += row;
+        })
+    })
+    .catch(err=>{
+        console.log(`Error: ${err}`)
+    });
+

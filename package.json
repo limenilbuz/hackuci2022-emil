@@ -1,0 +1,19 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "1",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/limenilbuz/hackuci2022-emil.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/limenilbuz/hackuci2022-emil/issues"
+  },
+  "homepage": "https://github.com/limenilbuz/hackuci2022-emil#readme"
+}
