@@ -119,6 +119,9 @@ main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot
 
             chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
             console.log(chosen_machine_id);
+            
+            
+            renderQueue(change.doc);
         }
         else if (change.type == "removed"){
             // probably wont be used...
@@ -131,7 +134,27 @@ main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot
 });
 
 
+function renderQueue(doc)
+{
+    let queue_screen_element = document.getElementById("current_machine_name");
+    
+    queue_screen_element.innerHTML = doc.data().name;
 
+    let ucinetid = doc.data().names[doc.data().names.length-1];
+    console.log(ucinetid);
+    let data = doc.data();
+    let row ="";
+    for(var i =1; i < data.names.length; i++)
+         row += `<tr><td>${i}</td><td>${data.names[i]}</td></tr>`;
+    //row += `</tr>`;
+    
+    let table = document.getElementById("myTable");
+    table.innerHTML = row;
+    console.log(row);
+
+}
+
+/*
 db.collection("machines")
 .get()
 .then(querySnapshot=>{
@@ -149,4 +172,4 @@ db.collection("machines")
     .catch(err=>{
         console.log(`Error: ${err}`)
     });
-
+*/
