@@ -44,11 +44,17 @@ firebase.auth().onAuthStateChanged((user) => {
             else if (change.type == "modified"){
                 // selects the modified list element
                 let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+                // li.style.backgroundColor = 'blue';
+                // li.style.color = 'red';
+                
                 // childNodes[1] represents the queue_size span element
                 // this code updates that span element to reflect the new queue size
     
                 //chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
                 //console.log(chosen_machine_id);
+                //li.style.background = "url('Machine1.jpg')";
+                //document.querySelector("machine-list").style.background ="url('Machine1.jpeg')"; 
+
                 
                 //renderMachines(change.doc);
                 renderQueue(change.doc, uid);
@@ -142,9 +148,14 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
+<<<<<<< HEAD
+    let ucinetid = doc.data().names[doc.data().names.length-1];
+
+=======
+>>>>>>> ba5c03696c1d8cb817a13096a0bc67ddfee89a9a
     // logic for rendering the screen initially
 
-    let queue_screen_element = document.getElementById("current_machine_name");
+    let queue_screen_element = document.getElementById("current_machine_name"); 
     queue_screen_element.innerHTML = doc.data().name;
 
     let pos = document.getElementById("position");
