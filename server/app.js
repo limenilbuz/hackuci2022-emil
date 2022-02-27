@@ -31,7 +31,7 @@ app.post('/sendsms', (req, res) => {
     client.messages.create({
         body: 'Your machine is ready!',
         from: '+18455721554',
-        to: '+19096315183'
+        to: '+15592038951'
     })
     .then(message => console.log(message.sid));
 })
