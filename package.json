@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/limenilbuz/hackuci2022-emil/issues"
   },
-  "homepage": "https://github.com/limenilbuz/hackuci2022-emil#readme"
+  "homepage": "https://github.com/limenilbuz/hackuci2022-emil#readme",
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  }
 }
