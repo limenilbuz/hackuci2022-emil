@@ -4,7 +4,6 @@ const main = document.querySelector('.main');
 const auth = document.querySelector('.auth');
 const queue_screen = document.querySelector('.queue-screen');
 
-
 // initial hides
 main.classList.add('hide');
 queue_screen.classList.add('hide');
@@ -113,12 +112,22 @@ function renderMachines(doc) {
     main_page_listener(); // deactivate the main page listener
 }
 
-// real time listener for main page
+async function sendSMS() {
+    try {
+        const response = await axios.post('http://localhost:3001/sendsms', {
+            phonenumber: "+12404724142",
+            textmessage: "Waitless - Your machine is ready!"
+        });
+
+        console.log(response);
+
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
-//let machine = db.collection('machines').doc(chosen_machine_id);
-//console.log(machine);
-
+// real time listener
 db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
