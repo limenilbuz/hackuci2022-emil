@@ -19,34 +19,7 @@ enter_button.addEventListener('click', (evnt) =>
     main.classList.remove('hide');
 });
 
-let main_page_listener;
 
-main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
-    let changes = snapshot.docChanges();
-    changes.forEach(change => {
-        if(change.type == "added"){
-            // renders all the machines intially
-            renderMachines(change.doc);
-        }
-        else if (change.type == "modified"){
-            // selects the modified list element
-            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
-            // childNodes[1] represents the queue_size span element
-            // this code updates that span element to reflect the new queue size
-            li.childNodes[1].innerHTML = change.doc.data().queue_size;
-
-            chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
-            console.log(chosen_machine_id);
-        }
-        else if (change.type == "removed"){
-            // probably wont be used...
-            // store the li element according to that data id that is removed
-            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
-            machineList.removeChild(li);
-        }
-    });
-
-})
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -109,7 +82,6 @@ function renderMachines(doc) {
         // once clicked, the page will redirect
     });
 
-    main_page_listener(); // deactivate the main page listener
 }
 
 async function sendSMS() {
@@ -128,12 +100,24 @@ async function sendSMS() {
 
 
 // real time listener
-db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
+let main_page_listener;
+
+main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
     let changes = snapshot.docChanges();
     changes.forEach(change => {
-        if (change.type == "modified"){
-            console.log(change.doc.id);
-            console.log(change.doc.data().names);
+        if(change.type == "added"){
+            // renders all the machines intially
+            renderMachines(change.doc);
+        }
+        else if (change.type == "modified"){
+            // selects the modified list element
+            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+            // childNodes[1] represents the queue_size span element
+            // this code updates that span element to reflect the new queue size
+            li.childNodes[1].innerHTML = change.doc.data().queue_size;
+
+            chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
+            console.log(chosen_machine_id);
         }
         else if (change.type == "removed"){
             // probably wont be used...
