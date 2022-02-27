@@ -58,7 +58,7 @@ firebase.auth().onAuthStateChanged((user) => {
                 
                 //renderMachines(change.doc);
                 renderQueue(change.doc, uid);
-                li.childNodes[1].innerHTML = change.doc.data().queue_size;
+                li.childNodes[1].innerHTML = "People in queue: " + (change.doc.data().names.length - 1);;
 
             }
             else if (change.type == "removed"){
@@ -175,7 +175,7 @@ function renderQueue(doc, user)
         db.collection('machines').doc(doc.id).update({
             name: doc.data().name,
             names: firebase.firestore.FieldValue.arrayRemove(uid),
-            queue_size: "People in queue: " + doc.data().names.length -1
+            queue_size: doc.data().names.length -1
         }); // updates the data stored in the FIREBASE database
 
         main.classList.remove('hide');
@@ -192,7 +192,7 @@ function renderQueue(doc, user)
         db.collection('machines').doc(doc.id).update({
             name: doc.data().name,
             names: firebase.firestore.FieldValue.arrayRemove(uid),
-            queue_size: doc.data().names.length -1
+            queue_size: (doc.data().names.length - 1)
         }); // updates the data stored in the FIREBASE database
 
         queue_screen.classList.add('hide');
