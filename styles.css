@@ -248,3 +248,46 @@ table{
     opacity: 1;
     right: 0;
   }
+
+  #claim_machine_button {
+    display: inline-block;
+    border-radius: 300px;
+    background-color: #1ef465;
+    border:#25c481;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 40px;
+    padding: 20px;
+    width: 900px;
+    height: 300px;
+    transition: all 0.5s;
+    cursor: pointer;
+    position: relative;
+    top: 650px;
+    
+  }
+  
+  #claim_machine_button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.9s;
+  }
+  
+  #claim_machine_button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -50px;
+    transition: 0.9s;
+  }
+  
+  #claim_machine_button:hover span {
+    padding-right: 35px;
+  }
+  
+  #claim_machine_button:hover span:after {
+    opacity: 1;
+    right: 0;
+  }

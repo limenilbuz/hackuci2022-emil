@@ -161,10 +161,6 @@ function renderQueue(doc, user)
 
     let pos = document.getElementById("position");
     pos.innerHTML = "You are "+ (doc.data().names.length-1) + " in line!";
-    //const JSONnames = require('./names.json');
-    //console.log(JSONnames);
-    fetch("names.json").then(response => response.json()).then(json=>console.log(json));
-    //console.log(json);
     let data = doc.data();
     let row ="";
     for(var i =1; i < data.names.length; i++)
@@ -204,9 +200,15 @@ function renderQueue(doc, user)
 
         queue_screen.classList.add('hide');
         claim_page.classList.remove('hide');
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+         }
 
-        sleep(30000).then(() =>{
+        sleep(10000).then(() =>{
             sendSMS();
+            claim_page.classList.add('hide');
+
+            auth.classList.remove('hide');
         });
 
     });
