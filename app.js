@@ -1,3 +1,16 @@
+let token = 'ezublin';
+
+firebase.auth().signInWithEmailAndPassword('ejzublin@gmail.com', 'a212sdf')
+  .then((userCredential) => {
+    // Signed in 
+    var user = userCredential.user;
+    console.log(user.email);
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log("ERROR!!!!!!!!!!!!!!", errorCode, errorMessage);
+  });
 
 const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main');
@@ -15,11 +28,62 @@ let enter_button = auth.querySelector(".landing #enter");
 // and to 'show' the main screen on click
 enter_button.addEventListener('click', (evnt) =>
 {
+    firebase.auth().signInAnonymously().then(()=>{
+
+    }).catch((error)=>{
+        console.log(error.code, error.message);
+    });
+
     auth.classList.add('hide');
     main.classList.remove('hide');
 });
 
+let uid;
 
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    uid = user.uid;
+
+    let main_page_listener;
+
+    main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
+        let changes = snapshot.docChanges();
+        changes.forEach(change => {
+            if(change.type == "added"){
+                // renders all the machines intially
+                renderMachines(change.doc);
+            }
+            else if (change.type == "modified"){
+                // selects the modified list element
+                let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+                // childNodes[1] represents the queue_size span element
+                // this code updates that span element to reflect the new queue size
+                li.childNodes[1].innerHTML = change.doc.data().queue_size;
+    
+                chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
+                //console.log(chosen_machine_id);
+                
+                
+                renderQueue(change.doc, uid);
+            }
+            else if (change.type == "removed"){
+                // probably wont be used...
+                // store the li element according to that data id that is removed
+                let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
+                machineList.removeChild(li);
+            }
+        });
+    
+    });
+    
+    
+
+
+    
+  } else {
+
+  }
+});
 
 function renderMachines(doc) {
     let li = document.createElement('li');
@@ -101,54 +165,37 @@ async function sendSMS() {
 
 
 // real time listener
-let main_page_listener;
 
-main_page_listener = db.collection('machines').orderBy('name', 'asc').onSnapshot(snapshot => {
-    let changes = snapshot.docChanges();
-    changes.forEach(change => {
-        if(change.type == "added"){
-            // renders all the machines intially
-            renderMachines(change.doc);
-        }
-        else if (change.type == "modified"){
-            // selects the modified list element
-            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
-            // childNodes[1] represents the queue_size span element
-            // this code updates that span element to reflect the new queue size
-            li.childNodes[1].innerHTML = change.doc.data().queue_size;
-
-            chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
-            console.log(chosen_machine_id);
-            
-            
-            renderQueue(change.doc);
-        }
-        else if (change.type == "removed"){
-            // probably wont be used...
-            // store the li element according to that data id that is removed
-            let li = machineList.querySelector('[data-id=' + change.doc.id + ']');
-            machineList.removeChild(li);
-        }
-    });
-
-});
-
-
-function renderQueue(doc)
+function renderQueue(doc, user)
 {
+    let ucinetid = doc.data().names[doc.data().names.length-1];
+
+    // logic for rendering the screen initially
+
     let queue_screen_element = document.getElementById("current_machine_name");
-    
     queue_screen_element.innerHTML = doc.data().name;
 
-    let ucinetid = doc.data().names[doc.data().names.length-1];
     //console.log(ucinetid);
     let data = doc.data();
     let row ="";
     for(var i =1; i < data.names.length; i++)
          row += `<tr><td>${i}</td><td>${data.names[i]}</td></tr>`;
-    //row += `</tr>`;
     
     let table = document.getElementById("myTable");
     table.innerHTML = row;
     
 }
+
+
+// $(window).on("load resize ", function() {
+//     var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
+//     $('.tbl-header').css({'padding-right':scrollWidth});
+//   }).resize();
+
+
+// leave_queue_id.addEventListener('click', (event)=>{
+
+//     let machine_name = document.getElementById("current_machine_name");
+//     const machine = db.collection('machines').doc(id);
+    
+// });
