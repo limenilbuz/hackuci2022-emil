@@ -2,11 +2,12 @@ const machineList = document.querySelector('#machine-list'); // store the DOM
 const main = document.querySelector('.main');
 const auth = document.querySelector('.auth');
 const queue_screen = document.querySelector('.queue-screen');
+const claim_page = document.querySelector('.claim_page');
 
 // initial hides
 main.classList.add('hide');
 queue_screen.classList.add('hide');
-
+claim_page.classList.add('hide');
 // get the enter button on the auth screen
 let enter_button = auth.querySelector(".landing #enter");
 
@@ -47,9 +48,8 @@ firebase.auth().onAuthStateChanged((user) => {
                 
                 // childNodes[1] represents the queue_size span element
                 // this code updates that span element to reflect the new queue size
-                li.childNodes[1].innerHTML = change.doc.data().queue_size;
     
-                chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
+                //chosen_machine_id = li.getAttribute("data-id"); // get the chosen machine id
                 //console.log(chosen_machine_id);
                 //li.style.background = "url('Machine1.jpg')";
                 //document.querySelector("machine-list").style.background ="url('Machine1.jpeg')"; 
@@ -57,6 +57,8 @@ firebase.auth().onAuthStateChanged((user) => {
                 
                 //renderMachines(change.doc);
                 renderQueue(change.doc, uid);
+                li.childNodes[1].innerHTML = change.doc.data().queue_size;
+
             }
             else if (change.type == "removed"){
                 // probably wont be used...
@@ -88,7 +90,7 @@ function renderMachines(doc) {
 
     // intialize the text content of the list item
     name.textContent = doc.data().name;
-    queue_size.textContent = doc.data().queue_size;
+    queue_size.textContent = doc.data().names.length - 1;
     add_button.textContent = "Join this queue";
 
     // append the items to the list item
@@ -111,27 +113,17 @@ function renderMachines(doc) {
         const machine = db.collection('machines').doc(id);
 
         // async function to update the queue.
-        machine.get().then((doc)=>{
-
-            // get the length of the array that represents the queue
-            queue_len = doc.data().names.length;
-
-            // prompt user for their UCInetID
-            //let ucinetid = prompt("Enter your UCInetID");
-
-            db.collection('machines').doc(id).update({
-                name: doc.data().name,
-                names: firebase.firestore.FieldValue.arrayUnion(uid),
-                queue_size: queue_len
-            }); // updates the data stored in the FIREBASE database 
-            
-            
-            main.classList.add('hide');
-            queue_screen.classList.remove('hide');
+        db.collection('machines').doc(id).update({
+            name: doc.data().name,
+            names: firebase.firestore.FieldValue.arrayUnion(uid),
+            queue_size: doc.data().names.length
+        }); // updates the data stored in the FIREBASE database 
         
-            });
 
         // once clicked, the page will redirect
+        main.classList.add('hide');
+        queue_screen.classList.remove('hide');
+        
     });
 
 }
@@ -155,14 +147,19 @@ async function sendSMS() {
 
 function renderQueue(doc, user)
 {
+<<<<<<< HEAD
     let ucinetid = doc.data().names[doc.data().names.length-1];
 
+=======
+>>>>>>> ba5c03696c1d8cb817a13096a0bc67ddfee89a9a
     // logic for rendering the screen initially
 
     let queue_screen_element = document.getElementById("current_machine_name"); 
     queue_screen_element.innerHTML = doc.data().name;
 
-    //console.log(ucinetid);
+    let pos = document.getElementById("position");
+    pos.innerHTML += doc.data().names.length-1 + " in line!";
+
     let data = doc.data();
     let row ="";
     for(var i =1; i < data.names.length; i++)
@@ -176,24 +173,33 @@ function renderQueue(doc, user)
     leave_queue_id.addEventListener('click', (event)=>{
 
         event.stopPropagation();
-        //console.log()
         
-        let machine_name = document.getElementById("current_machine_name");
-        const machine = db.collection('machines').doc(machine_name.getAttribute('data-id'));
-        console.log(machine);
-
-        let queue_len = doc.data().names.length - 1;
 
         main.classList.remove('hide');
         queue_screen.classList.add('hide');
 
+        sleep(30000).then(() =>{
+            sendSMS();
+        });
+    });
+    let claim_buttom = document.getElementById("claim_machine_button");
+    claim_buttom.addEventListener('click', (event) =>{
+        //sendSMS();
+        event.stopPropagation();
+        let machine_name = document.getElementById("current_machine_name");
+        const machine = db.collection('machines').doc(machine_name.getAttribute('data-id'));
         db.collection('machines').doc(doc.id).update({
             name: doc.data().name,
             names: firebase.firestore.FieldValue.arrayRemove(uid),
-            queue_size: queue_len
+            queue_size: doc.data().names.length -1
         }); // updates the data stored in the FIREBASE database
 
+        queue_screen.classList.add('hide');
+        claim_page.classList.remove('hide');
+
+
     });
+
 }
 
 
@@ -201,11 +207,20 @@ function renderQueue(doc, user)
 //     var scrollWidth = $('.tbl-content').width() - $('.tbl-content table').width();
 //     $('.tbl-header').css({'padding-right':scrollWidth});
 //   }).resize();
-
-
-// leave_queue_id.addEventListener('click', (event)=>{
-
-//     let machine_name = document.getElementById("current_machine_name");
-//     const machine = db.collection('machines').doc(id);
-    
-// });
+/*
+window.addEventListener('beforeunload', (e) => {
+    e.preventDefault();
+    e.returnValue = '';
+    db.collection("machines").get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            console.log(doc.data().names)
+            if (uid in doc.data().names)
+            {
+                db.collection('machines').doc(doc.id).update({
+                    names: firebase.firestore.FieldValue.arrayRemove(uid)
+                })
+            }
+        });
+    });
+});
+*/
