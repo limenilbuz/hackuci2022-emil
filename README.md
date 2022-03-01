@@ -19,3 +19,5 @@ The main thing we learned from using Firebase is just how powerful real-time dat
 Another thing that we implemented in this project was the use of TwilioAPI that can send SMS messages to users when they are about to get their requested machine. Since Javascript didn't natively support this API, we had to implement the use of a few other tecnologies, namely Node.js and Express.js. With their powers combined, we were able to add Twilio functionality into our app to send out messages to users.
 
 Overall, we had a lot of fun, learned a lot, and are excited to attend more hackathons in the future with our new knowledge.
+
+![UI](https://user-images.githubusercontent.com/100456310/156118270-07774e6c-dd9f-41a3-8c97-1b6695f39051.png)
