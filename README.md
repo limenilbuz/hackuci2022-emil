@@ -1,3 +1,4 @@
+# This project was the recipent of two awards during HACK@UCI 2022, Best Social Good Hack & Best Product Pitch (MAISS)
 # <img src="Images/Logo1.png" width=10%  style="float : right"/> 
 # Waitless, a simple queuing system 
 ## Built in 36 hours during HACK@UCI 2022
